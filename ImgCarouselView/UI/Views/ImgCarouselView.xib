@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ImgCarouselView" customModule="EparkCure" customModuleProvider="target">
+            <connections>
+                <outlet property="collectionView" destination="fbG-6q-ECs" id="E19-ds-IRq"/>
+                <outlet property="pageControl" destination="Jmp-QT-ABB" id="Lml-vW-Q7K"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="220"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="fbG-6q-ECs">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="220"/>
+                    <color key="backgroundColor" red="0.96470588239999999" green="0.41176470590000003" blue="0.4823529412" alpha="1" colorSpace="calibratedRGB"/>
+                    <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="Ucf-Y9-9Rh">
+                        <size key="itemSize" width="375" height="220"/>
+                        <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                        <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                    </collectionViewFlowLayout>
+                </collectionView>
+                <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="Jmp-QT-ABB">
+                    <rect key="frame" x="168" y="183" width="39" height="37"/>
+                </pageControl>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="Jmp-QT-ABB" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="APS-bU-YRk"/>
+                <constraint firstAttribute="bottom" secondItem="Jmp-QT-ABB" secondAttribute="bottom" id="FpV-Zo-vac"/>
+                <constraint firstItem="fbG-6q-ECs" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="If8-Wp-gxZ"/>
+                <constraint firstAttribute="bottom" secondItem="fbG-6q-ECs" secondAttribute="bottom" id="JXq-fg-QgH"/>
+                <constraint firstAttribute="trailing" secondItem="fbG-6q-ECs" secondAttribute="trailing" id="Jjt-wM-vUk"/>
+                <constraint firstItem="fbG-6q-ECs" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="P7x-Ln-4zD"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="-179" y="-195"/>
+        </view>
+    </objects>
+</document>
