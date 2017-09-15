@@ -9,12 +9,12 @@
 import UIKit
 import Nuke
 
-enum ImageSource {
+public enum ImageSource {
     case url(URL)
     case image(UIImage)
 }
 
-final class ImgCarouselCollectionCell: UICollectionViewCell {
+public final class ImgCarouselCollectionCell: UICollectionViewCell {
     // MARK: - Properties
 
     // MARK: - View Elements

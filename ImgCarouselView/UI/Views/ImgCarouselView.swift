@@ -9,7 +9,7 @@
 import UIKit
 import Nuke
 
-final class ImgCarouselView: UIView, XibInstantiatable {
+public final class ImgCarouselView: UIView, XibInstantiatable {
 
     // MARK: - Properties
     fileprivate var imageSources: [ImageSource] = []
@@ -22,24 +22,24 @@ final class ImgCarouselView: UIView, XibInstantiatable {
     fileprivate let preheater = Preheater(manager: Manager.shared)
 
     // MARK: - Lifecycle Methods
-    override init(frame: CGRect) {
+    public override init(frame: CGRect) {
         super.init(frame: frame)
-        instantiate()
+//        instantiate()
         configureCollectionView()
     }
     
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         instantiate()
         configureCollectionView()
     }
     
-    func configure(urls: [URL]) {
+    public func configure(urls: [URL]) {
         imageSources = urls.map { .url($0) }
         configureViewParts()
     }
     
-    func configure(images: [UIImage]) {
+    public func configure(images: [UIImage]) {
         imageSources = images.map { .image($0) }
         configureViewParts()
     }
@@ -70,11 +70,11 @@ final class ImgCarouselView: UIView, XibInstantiatable {
 }
 
 extension ImgCarouselView: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return imageSources.count
     }
 
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath)
+    public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath)
         -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithType(ImgCarouselCollectionCell.self, forIndexPath: indexPath)
         if indexPath.row < imageSources.count {
@@ -86,13 +86,13 @@ extension ImgCarouselView: UICollectionViewDataSource {
 
 extension ImgCarouselView: UICollectionViewDataSourcePrefetching {
 
-    func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
+    public func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
         preheater.startPreheating(
             with: makeCacheRequests(indexPaths: indexPaths)
         )
     }
 
-    func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {
+    public func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {
         preheater.stopPreheating(
             with: makeCacheRequests(indexPaths: indexPaths)
         )
@@ -122,7 +122,7 @@ extension ImgCarouselView: UICollectionViewDelegate {
     // stub
 }
 extension ImgCarouselView: UICollectionViewDelegateFlowLayout {
-    func collectionView(
+    public func collectionView(
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
         sizeForItemAt indexPath: IndexPath
@@ -132,7 +132,7 @@ extension ImgCarouselView: UICollectionViewDelegateFlowLayout {
 }
 
 extension ImgCarouselView: UIScrollViewDelegate {
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         pageControl.currentPage = Int(collectionView.contentOffset.x / collectionView.frame.size.width)
     }
 }
