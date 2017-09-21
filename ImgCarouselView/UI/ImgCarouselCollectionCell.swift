@@ -1,9 +1,9 @@
 //
 //  ImgCarouselCollectionCell.swift
-//  EparkCure
+//  ImgCarouselView
 //
-//  Created by msano on 2017/07/19.
-//  Copyright © 2017年 Ohako, Inc. All rights reserved.
+//  Created by msano on 2017/09/20.
+//  Copyright © 2017年 msano. All rights reserved.
 //
 
 import UIKit
@@ -16,7 +16,7 @@ public enum ImageSource {
 
 public final class ImgCarouselCollectionCell: UICollectionViewCell {
     // MARK: - Properties
-
+    
     // MARK: - View Elements
     @IBOutlet weak var imageView: UIImageView!
     

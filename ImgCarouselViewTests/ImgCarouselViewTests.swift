@@ -2,7 +2,7 @@
 //  ImgCarouselViewTests.swift
 //  ImgCarouselViewTests
 //
-//  Created by msano on 2017/09/15.
+//  Created by msano on 2017/09/20.
 //  Copyright © 2017年 msano. All rights reserved.
 //
 
