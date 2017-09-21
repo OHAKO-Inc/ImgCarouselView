@@ -30,20 +30,17 @@ public final class ImgCarouselView: UIView, XibInstantiatable {
     public override init(frame: CGRect) {
         super.init(frame: frame)
         instantiate()
+        configureCollectionView()
     }
     
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         instantiate()
+        configureCollectionView()
     }
     
     public convenience init() {
         self.init(frame: .zero)
-    }
-    
-    public override func awakeFromNib() {
-        super.awakeFromNib()
-        configureCollectionView()
     }
     
     public func configure(urls: [URL]) {
