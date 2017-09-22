@@ -28,7 +28,7 @@ public final class ImgCarouselCollectionCell: UICollectionViewCell {
 }
 
 // MARK: - Private Methods
-fileprivate extension ImgCarouselCollectionCell {
+public extension ImgCarouselCollectionCell {
     func applyStyles() {
         imageView.contentMode = .scaleToFill
     }
