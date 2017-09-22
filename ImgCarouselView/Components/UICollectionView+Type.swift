@@ -11,7 +11,7 @@ import UIKit
 public extension UICollectionView {
     public func registerNibForCellWithType<T: UICollectionViewCell>(_ type: T.Type) {
         let className = String(describing: T.self)
-        let nib = UINib(nibName: className, bundle: nil)
+        let nib = UINib(nibName: className, bundle: Bundle(for: type(of: self)))
         register(nib, forCellWithReuseIdentifier: className)
     }
     
