@@ -22,7 +22,6 @@
             <subviews>
                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="UrV-jJ-7ZQ">
                     <rect key="frame" x="0.0" y="0.0" width="375" height="220"/>
-                    <color key="backgroundColor" red="0.96470588239999999" green="0.41176470590000003" blue="0.4823529412" alpha="1" colorSpace="calibratedRGB"/>
                     <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="cdN-On-3eh">
                         <size key="itemSize" width="375" height="220"/>
                         <size key="headerReferenceSize" width="0.0" height="0.0"/>

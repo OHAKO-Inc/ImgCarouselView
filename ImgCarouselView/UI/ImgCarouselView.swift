@@ -9,17 +9,11 @@
 import UIKit
 import Nuke
 
-//protocol ImgCarouselViewProtocol {
-//    var imageSources: [ImageSource] { get }
-//}
-
-//public final class ImgCarouselView: UIView, ImgCarouselViewProtocol, XibInstantiatable {
 public final class ImgCarouselView: UIView, XibInstantiatable {
-    
     // MARK: - Properties
     fileprivate var imageSources: [ImageSource] = []
     
-    //    // MARK: - View Elements
+    // MARK: - View Elements
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var pageControl: UIPageControl!
     
