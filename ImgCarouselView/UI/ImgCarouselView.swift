@@ -12,6 +12,11 @@ import Nuke
 public final class ImgCarouselView: UIView, XibInstantiatable {
     // MARK: - Properties
     fileprivate var imageSources: [ImageSource] = []
+    var cellContentMode: UIViewContentMode = .scaleAspectFit {
+        didSet {
+            collectionView.reloadData()
+        }
+    }
     
     // MARK: - View Elements
     @IBOutlet weak var collectionView: UICollectionView!
@@ -67,6 +72,7 @@ public final class ImgCarouselView: UIView, XibInstantiatable {
     }
 }
 
+
 extension ImgCarouselView: UICollectionViewDataSource {
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return imageSources.count
@@ -76,6 +82,7 @@ extension ImgCarouselView: UICollectionViewDataSource {
         -> UICollectionViewCell {
             let cell = collectionView.dequeueReusableCellWithType(ImgCarouselCollectionCell.self, forIndexPath: indexPath)
             if indexPath.row < imageSources.count {
+                cell.applyStyles(contentMode: cellContentMode)
                 cell.configure(with: imageSources[indexPath.row])
             }
             return cell

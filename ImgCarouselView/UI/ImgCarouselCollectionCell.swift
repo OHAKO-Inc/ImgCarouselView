@@ -23,17 +23,17 @@ public final class ImgCarouselCollectionCell: UICollectionViewCell {
     // MARK: - Configuration
     func configure(with imageSource: ImageSource) {
         bind(imageSource)
-        applyStyles()
     }
 }
 
 // MARK: - Private Methods
 public extension ImgCarouselCollectionCell {
-    func applyStyles() {
-        imageView.contentMode = .scaleToFill
+    func applyStyles(contentMode: UIViewContentMode) {
+        imageView.contentMode = contentMode
+        
     }
     
-    func bind(_ imageSource: ImageSource) {
+    fileprivate func bind(_ imageSource: ImageSource) {
         switch imageSource {
         case .image(let image):
             imageView.image = image
