@@ -15,8 +15,6 @@ public enum ImageSource {
 }
 
 public final class ImgCarouselCollectionCell: UICollectionViewCell {
-    // MARK: - Properties
-    
     // MARK: - View Elements
     @IBOutlet weak var imageView: UIImageView!
     
