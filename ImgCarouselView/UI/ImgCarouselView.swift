@@ -12,7 +12,7 @@ import Nuke
 public final class ImgCarouselView: UIView, XibInstantiatable {
     // MARK: - Properties
     fileprivate var imageSources: [ImageSource] = []
-    var cellContentMode: UIViewContentMode = .scaleAspectFit {
+    public var cellContentMode: UIViewContentMode = .scaleAspectFit {
         didSet {
             collectionView.reloadData()
         }
