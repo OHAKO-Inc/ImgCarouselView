@@ -14,85 +14,68 @@ import Nimble
 
 class ImgCarouselViewSpec: QuickSpec {
     override func spec() {
-        var imgCarouselViewMock: ImgCarouselView!
+        var imgCarouselView: ImgCarouselView!
         
         beforeEach {
-            imgCarouselViewMock = ImgCarouselView()
+            imgCarouselView = ImgCarouselView()
+        }
+
+        describe("view setting") {
+            it ("initialize required view parts") {
+                expect(imgCarouselView.collectionView) != nil
+                expect(imgCarouselView.pageControl) != nil
+            }
         }
         
         describe("cells state") {
-            context("configure with some image urls") {
+            context("configure with some imageSources") {
                 it("succeeds to generate cells and display page control") {
                     // arrange
-                    let urls = [
-                        URL(string: "https://www.pakutaso.com/shared/img/thumb/NEKONEKOIMG_7878_TP_V.jpg")!,
-                        URL(string: "https://www.pakutaso.com/shared/img/thumb/NEKONEKOIMG_7878_TP_V.jpg")!,
-                        URL(string: "https://www.pakutaso.com/shared/img/thumb/NEKONEKOIMG_7878_TP_V.jpg")!
+                    let imageSources: [ImageSource] = [
+                        .url(URL(string: "https://www.pakutaso.com/shared/img/thumb/NEKONEKOIMG_7878_TP_V.jpg")!),
+                        .url(URL(string: "https://www.pakutaso.com/shared/img/thumb/NEKONEKOIMG_7878_TP_V.jpg")!),
+                        .image(
+                            UIImage(
+                                named: "sample",
+                                in: Bundle(for: type(of: self)),
+                                compatibleWith: nil
+                            )!
+                        )
                     ]
                     
                     //act
-                    imgCarouselViewMock.configure(urls: urls)
+                    imgCarouselView.configure(imageSources: imageSources)
                     
                     //assert
-                    expect(imgCarouselViewMock.collectionView) != nil
-                    expect(imgCarouselViewMock.pageControl) != nil
-                    expect(imgCarouselViewMock.pageControl.isHidden) == false
-                    expect(imgCarouselViewMock.collectionView.numberOfItems(inSection: 0)) == urls.count
-                    expect(imgCarouselViewMock.pageControl.numberOfPages) == urls.count
-                    // let cell = imgCarouselViewMock.collectionView.cellForItem(at: IndexPath(row: 0, section: 0)) as? ImgCarouselCollectionCell
-                    // expect(cell?.imageView) != nil
+                    expect(imgCarouselView.pageControl.isHidden) == false
+                    expect(imgCarouselView.collectionView.numberOfItems(inSection: 0)) == imageSources.count
+                    expect(imgCarouselView.pageControl.numberOfPages) == imageSources.count
                 }
             }
-            context("configure with some images") {
-                it("succeeds to generate cells and display page control") {
-                    // arrange
-                    let image = UIImage(
-                        named: "sample",
-                        in: Bundle(for: type(of: self)),
-                        compatibleWith: nil
-                    )
-                    let images = [
-                        image!,
-                        image!
-                    ]
-
-                    //act
-                    imgCarouselViewMock.configure(images: images)
-                    
-                    //assert
-                    expect(imgCarouselViewMock.collectionView) != nil
-                    expect(imgCarouselViewMock.pageControl) != nil
-                    expect(imgCarouselViewMock.pageControl.isHidden) == false
-                    expect(imgCarouselViewMock.collectionView.numberOfItems(inSection: 0)) == images.count
-                    expect(imgCarouselViewMock.pageControl.numberOfPages) == images.count
-                }
-            }
-            context("configure with one image url") {
+            context("configure with one imageSource") {
                 it("succeeds to generate cells and hide page control") {
                     // arrange
-                    let oneUrl = [URL(string: "https://www.pakutaso.com/shared/img/thumb/NEKONEKOIMG_7878_TP_V.jpg")!]
+                    let oneImageSource: [ImageSource] = [
+                        .url(URL(string: "https://www.pakutaso.com/shared/img/thumb/NEKONEKOIMG_7878_TP_V.jpg")!)
+                    ]
                     //act
-                    imgCarouselViewMock.configure(urls: oneUrl)
+                    imgCarouselView.configure(imageSources: oneImageSource)
                     
                     //assert
-                    expect(imgCarouselViewMock.collectionView) != nil
-                    expect(imgCarouselViewMock.pageControl) != nil
-                    expect(imgCarouselViewMock.pageControl.isHidden) == true
-                    expect(imgCarouselViewMock.collectionView.numberOfItems(inSection: 0)) == oneUrl.count
-                    expect(imgCarouselViewMock.pageControl.numberOfPages) == oneUrl.count
+                    expect(imgCarouselView.pageControl.isHidden) == true
+                    expect(imgCarouselView.collectionView.numberOfItems(inSection: 0)) == oneImageSource.count
+                    expect(imgCarouselView.pageControl.numberOfPages) == oneImageSource.count
                 }
             }
             context("configure with no object") {
                 it("fails to generate cells and hide page control") {
                     //act
-                    imgCarouselViewMock.configure(urls: [])
+                    imgCarouselView.configure(imageSources: [])
 
                     //assert
-                    expect(imgCarouselViewMock.collectionView) != nil
-                    expect(imgCarouselViewMock.pageControl) != nil
-                    expect(imgCarouselViewMock.pageControl.isHidden) == true
-                    expect(imgCarouselViewMock.collectionView.numberOfItems(inSection: 0)) == 0
-                    expect(imgCarouselViewMock.pageControl.numberOfPages) == 0
+                    expect(imgCarouselView.pageControl.isHidden) == true
+                    expect(imgCarouselView.collectionView.numberOfItems(inSection: 0)) == 0
+                    expect(imgCarouselView.pageControl.numberOfPages) == 0
                 }
             }
         }

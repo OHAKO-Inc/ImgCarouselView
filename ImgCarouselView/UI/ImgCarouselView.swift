@@ -37,13 +37,8 @@ public final class ImgCarouselView: UIView, XibInstantiatable {
         self.init(frame: .zero)
     }
     
-    public func configure(urls: [URL]) {
-        imageSources = urls.map { .url($0) }
-        configureViewParts()
-    }
-    
-    public func configure(images: [UIImage]) {
-        imageSources = images.map { .image($0) }
+    public func configure(imageSources: [ImageSource]) {
+        self.imageSources = imageSources
         configureViewParts()
     }
     
