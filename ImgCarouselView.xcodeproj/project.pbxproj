@@ -11,7 +11,6 @@
 		E61EE74C1F73AEFC0026700C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E61EE7381F73AB430026700C /* Assets.xcassets */; };
 		E639BE221F7241FE00D7EEB4 /* ImgCarouselCollectionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = E639BE211F7241FE00D7EEB4 /* ImgCarouselCollectionCell.xib */; };
 		E677A2BB1F720DDD001890E4 /* ImgCarouselView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E677A2B11F720DDD001890E4 /* ImgCarouselView.framework */; };
-		E677A2C01F720DDD001890E4 /* ImgCarouselViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E677A2BF1F720DDD001890E4 /* ImgCarouselViewTests.swift */; };
 		E677A2C21F720DDD001890E4 /* ImgCarouselView.h in Headers */ = {isa = PBXBuildFile; fileRef = E677A2B41F720DDD001890E4 /* ImgCarouselView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E677A2CF1F720F1B001890E4 /* Nuke.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E677A2CE1F720F1B001890E4 /* Nuke.framework */; };
 		E677A4921F720FEA001890E4 /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E677A4661F720FCE001890E4 /* Nimble.framework */; };
@@ -184,7 +183,6 @@
 		E677A2B41F720DDD001890E4 /* ImgCarouselView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImgCarouselView.h; sourceTree = "<group>"; };
 		E677A2B51F720DDD001890E4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E677A2BA1F720DDD001890E4 /* ImgCarouselViewTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ImgCarouselViewTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		E677A2BF1F720DDD001890E4 /* ImgCarouselViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImgCarouselViewTests.swift; sourceTree = "<group>"; };
 		E677A2C11F720DDD001890E4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E677A2CE1F720F1B001890E4 /* Nuke.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nuke.framework; path = Carthage/Build/iOS/Nuke.framework; sourceTree = "<group>"; };
 		E677A2D31F720FCE001890E4 /* ISSUE_TEMPLATE */ = {isa = PBXFileReference; lastKnownFileType = text; path = ISSUE_TEMPLATE; sourceTree = "<group>"; };
@@ -579,7 +577,6 @@
 		E677A2BE1F720DDD001890E4 /* ImgCarouselViewTests */ = {
 			isa = PBXGroup;
 			children = (
-				E677A2BF1F720DDD001890E4 /* ImgCarouselViewTests.swift */,
 				E677A2C11F720DDD001890E4 /* Info.plist */,
 				E677A4A31F7211C5001890E4 /* ImgCarouselViewSpec.swift */,
 			);
@@ -1758,7 +1755,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E677A2C01F720DDD001890E4 /* ImgCarouselViewTests.swift in Sources */,
 				E677A4A41F7211C5001890E4 /* ImgCarouselViewSpec.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
