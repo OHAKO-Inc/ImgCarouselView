@@ -22,14 +22,9 @@ class ImgCarouselViewSpec: QuickSpec {
 
         describe("view setting") {
             it ("initialize required view parts") {
-                // arrange
-//                imgCarouselView.configure(imageSources: [])
-                
-                //act
-//                expect(imgCarouselView.collectionView) != nil
-//                expect(imgCarouselView.pageControl) != nil
-
-//                expect(imgCarouselView.pageControl)
+                //assert
+                expect(imgCarouselView.collectionView).notTo(beNil())
+                expect(imgCarouselView.pageControl).notTo(beNil())
             }
         }
         
