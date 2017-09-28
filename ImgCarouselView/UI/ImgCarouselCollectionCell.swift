@@ -1,39 +1,37 @@
 //
 //  ImgCarouselCollectionCell.swift
-//  EparkCure
+//  ImgCarouselView
 //
-//  Created by msano on 2017/07/19.
-//  Copyright © 2017年 Ohako, Inc. All rights reserved.
+//  Created by msano on 2017/09/20.
+//  Copyright © 2017年 msano. All rights reserved.
 //
 
 import UIKit
 import Nuke
 
-enum ImageSource {
+public enum ImageSource {
     case url(URL)
     case image(UIImage)
 }
 
-final class ImgCarouselCollectionCell: UICollectionViewCell {
-    // MARK: - Properties
-
+public final class ImgCarouselCollectionCell: UICollectionViewCell {
     // MARK: - View Elements
     @IBOutlet weak var imageView: UIImageView!
     
     // MARK: - Configuration
     func configure(with imageSource: ImageSource) {
         bind(imageSource)
-        applyStyles()
     }
 }
 
 // MARK: - Private Methods
-fileprivate extension ImgCarouselCollectionCell {
-    func applyStyles() {
-        imageView.contentMode = .scaleToFill
+public extension ImgCarouselCollectionCell {
+    func applyStyles(contentMode: UIViewContentMode) {
+        imageView.contentMode = contentMode
+        
     }
     
-    func bind(_ imageSource: ImageSource) {
+    fileprivate func bind(_ imageSource: ImageSource) {
         switch imageSource {
         case .image(let image):
             imageView.image = image

@@ -1,46 +1,49 @@
 //
 //  ImgCarouselView.swift
-//  EparkCure
+//  ImgCarouselView
 //
-//  Created by msano on 2017/07/19.
-//  Copyright © 2017年 Ohako, Inc. All rights reserved.
+//  Created by msano on 2017/09/20.
+//  Copyright © 2017年 msano. All rights reserved.
 //
 
 import UIKit
 import Nuke
 
-final class ImgCarouselView: UIView, XibInstantiatable {
-
+public final class ImgCarouselView: UIView, XibInstantiatable {
     // MARK: - Properties
     fileprivate var imageSources: [ImageSource] = []
+    fileprivate var cellContentMode: UIViewContentMode = .scaleAspectFit
     
-//    // MARK: - View Elements
+    // MARK: - View Elements
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var pageControl: UIPageControl!
     
     // MARK: - for UICollectionViewDataSourcePrefetching
     fileprivate let preheater = Preheater(manager: Manager.shared)
-
+    
     // MARK: - Lifecycle Methods
-    override init(frame: CGRect) {
+    public override init(frame: CGRect) {
         super.init(frame: frame)
         instantiate()
         configureCollectionView()
     }
     
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         instantiate()
         configureCollectionView()
     }
     
-    func configure(urls: [URL]) {
-        imageSources = urls.map { .url($0) }
-        configureViewParts()
+    public convenience init() {
+        self.init(frame: .zero)
     }
     
-    func configure(images: [UIImage]) {
-        imageSources = images.map { .image($0) }
+    public func configure(
+        imageSources: [ImageSource],
+        cellContentMode: UIViewContentMode = .scaleAspectFit
+    ) {
+        self.cellContentMode = cellContentMode
+        self.imageSources = imageSources
         configureViewParts()
     }
     
@@ -50,7 +53,7 @@ final class ImgCarouselView: UIView, XibInstantiatable {
         applyStyles()
         collectionView.reloadData()
     }
-
+    
     private func configureCollectionView() {
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -58,41 +61,43 @@ final class ImgCarouselView: UIView, XibInstantiatable {
         collectionView.registerNibForCellWithType(ImgCarouselCollectionCell.self)
         collectionView.showsHorizontalScrollIndicator = false
     }
-
+    
     private func updatePageControl() {
         pageControl.isHidden = imageSources.isEmpty || (imageSources.count == 1)
         pageControl.numberOfPages = imageSources.count
     }
-
+    
     private func applyStyles() {
         // stub
     }
 }
 
+
 extension ImgCarouselView: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return imageSources.count
     }
-
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath)
+    
+    public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath)
         -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithType(ImgCarouselCollectionCell.self, forIndexPath: indexPath)
-        if indexPath.row < imageSources.count {
-            cell.configure(with: imageSources[indexPath.row])
-        }
-        return cell
+            let cell = collectionView.dequeueReusableCellWithType(ImgCarouselCollectionCell.self, forIndexPath: indexPath)
+            if indexPath.row < imageSources.count {
+                cell.applyStyles(contentMode: cellContentMode)
+                cell.configure(with: imageSources[indexPath.row])
+            }
+            return cell
     }
 }
 
 extension ImgCarouselView: UICollectionViewDataSourcePrefetching {
-
-    func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
+    
+    public func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
         preheater.startPreheating(
             with: makeCacheRequests(indexPaths: indexPaths)
         )
     }
-
-    func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {
+    
+    public func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {
         preheater.stopPreheating(
             with: makeCacheRequests(indexPaths: indexPaths)
         )
@@ -122,7 +127,7 @@ extension ImgCarouselView: UICollectionViewDelegate {
     // stub
 }
 extension ImgCarouselView: UICollectionViewDelegateFlowLayout {
-    func collectionView(
+    public func collectionView(
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
         sizeForItemAt indexPath: IndexPath
@@ -132,7 +137,7 @@ extension ImgCarouselView: UICollectionViewDelegateFlowLayout {
 }
 
 extension ImgCarouselView: UIScrollViewDelegate {
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         pageControl.currentPage = Int(collectionView.contentOffset.x / collectionView.frame.size.width)
     }
 }
