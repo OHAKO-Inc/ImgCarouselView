@@ -36,9 +36,14 @@ if let image = UIImage(named: "sample-m"),
             .image(image)
         ]
     )
+    
+    // customize contentMode (if you want)
+//    imgCarouselView.configure(
+//        imageSources: [
+//            .url(imageUrl01),
+//            .url(imageUrl02),
+//            .image(image)
+//        ],
+//        cellContentMode: .scaleAspectFill
+//    )
 }
-
-// ------------------------------------
-// customize (if you want)
-// ------------------------------------
-
