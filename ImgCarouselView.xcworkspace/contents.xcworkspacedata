@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:ImgCarouselViewPlayground.playground">
+   </FileRef>
+   <FileRef
       location = "container:ImgCarouselView.xcodeproj">
    </FileRef>
 </Workspace>
