@@ -7,11 +7,38 @@ import ImgCarouselView
 
 let viewController = UIViewController()
 viewController.view.backgroundColor = .white
-
-let view = UIView()
-view.backgroundColor = .orange
-
-view.frame = CGRect(x: 100, y: 100, width: 100, height: 100)
-viewController.view.addSubview(view)
-
 PlaygroundPage.current.liveView = viewController
+
+// ------------------------------------
+// setup
+// ------------------------------------
+
+// add imgCarouselView
+let imgCarouselView = ImgCarouselView(
+    frame: CGRect(
+        x: 0,
+        y: 0,
+        width: viewController.view.bounds.width,
+        height: viewController.view.bounds.height
+    )
+)
+viewController.view.addSubview(imgCarouselView)
+
+// configure imgCarouselView
+if let image = UIImage(named: "sample-m"),
+    let imageUrl01 = URL(string: "https://www.pakutaso.com/shared/img/thumb/taiyonotouSDIM3846_TP_V.jpg"),
+    let imageUrl02 = URL(string: "https://www.pakutaso.com/shared/img/thumb/NEKONEKOIMG_7878_TP_V.jpg") {
+    
+    imgCarouselView.configure(
+        imageSources: [
+            .url(imageUrl01),
+            .url(imageUrl02),
+            .image(image)
+        ]
+    )
+}
+
+// ------------------------------------
+// customize (if you want)
+// ------------------------------------
+
