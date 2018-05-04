@@ -17,6 +17,8 @@ imgCarouselView.configure(
     ],
     cellContentMode: .scaleAspectFill
 )
+
+// you can add this imgCarouselView anywhere!
 ```
 
 ## Dependencies
