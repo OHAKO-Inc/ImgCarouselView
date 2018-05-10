@@ -6,7 +6,8 @@ import Foundation
 import Nuke
 import DFCache
 
-class CustomCacheDemoViewController: BasicDemoViewController {
+
+final class CustomCacheDemoViewController: BasicDemoViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -32,7 +33,7 @@ protocol DataCaching {
     func storeResponse(_ response: CachedURLResponse, for request: URLRequest)
 }
 
-class CachingDataLoader: DataLoading {
+final class CachingDataLoader: DataLoading {
     private let loader: DataLoading
     private let cache: DataCaching
     private let queue = DispatchQueue(label: "com.github.kean.Nuke.CachingDataLoader")
@@ -42,17 +43,16 @@ class CachingDataLoader: DataLoading {
         self.cache = cache
     }
 
-    public func loadData(with request: Request, token: CancellationToken?, completion: @escaping (Result<(Data, URLResponse)>) -> Void) {
+    func loadData(with request: URLRequest, token: CancellationToken?, progress: ProgressHandler?, completion: @escaping (Result<(Data, URLResponse)>) -> Void) {
         queue.async { [weak self] in
             if token?.isCancelling == true {
                 return
             }
-            let urlRequest = request.urlRequest
-            if let response = self?.cache.cachedResponse(for: urlRequest) {
+            if let response = self?.cache.cachedResponse(for: request) {
                 completion(.success((response.data, response.response)))
             } else {
-                self?.loader.loadData(with: request, token: token) {
-                    $0.value.map { self?.store($0, for: urlRequest) }
+                self?.loader.loadData(with: request, token: token, progress: progress) {
+                    $0.value.map { self?.store($0, for: request) }
                     completion($0)
                 }
             }

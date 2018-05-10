@@ -1,6 +1,6 @@
 // The MIT License (MIT)
 //
-// Copyright (c) 2017 Alexander Grebenyuk (github.com/kean).
+// Copyright (c) 2015-2018 Alexander Grebenyuk (github.com/kean).
 
 import XCTest
 import Foundation
@@ -15,11 +15,11 @@ extension XCTestCase {
         return self.expectation(description: "GenericExpectation")
     }
     
-    func expectNotification(_ name: Notification.Name, object: AnyObject? = nil, handler: XCNotificationExpectationHandler? = nil) -> XCTestExpectation {
-        return self.expectation(forNotification: name.rawValue, object: object, handler: handler)
+    func expectNotification(_ name: Notification.Name, object: AnyObject? = nil, handler: XCTNSNotificationExpectation.Handler? = nil) -> XCTestExpectation {
+        return self.expectation(forNotification: name, object: object, handler: handler)
     }
 
-    func wait(_ timeout: TimeInterval = 2.0, handler: XCWaitCompletionHandler? = nil) {
+    func wait(_ timeout: TimeInterval = 5.0, handler: XCWaitCompletionHandler? = nil) {
         self.waitForExpectations(timeout: timeout, handler: handler)
     }
 }

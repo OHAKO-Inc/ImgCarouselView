@@ -1,3 +1,106 @@
+## Nuke 6.1.1
+
+- Lower macOS deployment target to 10.10. #156.
+- Improve README: add detailed *Image Pipeline* section, *Performance* section, rewrite *Usage* guide
+
+## Nuke 6.1
+
+### Features
+
+- Add `Request.Priority` with 5 available options ranging from `.veryLow` to `.veryHigh`. One of the use cases of `Request.Priority` is to lower the priority of preheating requests. In case requests get deduplicated the task's priority is set to the highest priority of registered requests and gets updated when requests are added or removed from the task.
+
+### Improvements
+
+- Fix warnings on Xcode 9.3 beta 3
+- `Loader` implementation changed a bit, it is less clever now and is able to accommodate new features like request priorities
+- Minor changes in style guide to make codebase more readable
+- Switch to native `NSLock`, there doesn't seem to be any performance wins anymore when using `pthread_mutex` directly
+
+### Fixes
+
+- #146 fix disk cache path for macOS, thanks to @willdahlberg
+
+
+## Nuke 6.0
+
+> About 8 months ago I finally started using Nuke in production. The project has matured from a playground for experimenting with Swift features to something that I rely on in my day's job.
+
+There are three main areas of improvements in Nuke 6:
+
+- Performance. Nuke 6 is fast! The primary `loadImage(with:into:)` method is now **1.5x** faster thanks to performance improvements of [`CancellationToken`](https://kean.github.io/post/cancellation-token), `Manager`, `Request` and `Cache` types. And it's not just main thread performance, many of the background operations were also optimized.
+- API refinements. Some common operations that were surprisingly hard to do are not super easy. And there are no more implementation details leaking into a public API (e.g. classes like `Deduplicator`).
+- Fixes some inconveniences like Thread Sanitizer warnings (false positives!). Improved compile time. Better documentation.
+
+### Features
+
+- Implements progress reporting https://github.com/kean/Nuke/issues/81
+- Scaling images is now super easy with new convenience `Request` initialisers (`Request.init(url:targetSize:contentMode:` and `Request.init(urlRequest:targetSize:contentMode:`)
+- Add a way to add anonymous image processors to the request (`Request.process(key:closure:)` and `Request.processed(key:closure:)`)
+- Add `Loader.Options` which can be used to configure `Loader` (e.g. change maximum number of concurrent requests, disable deduplication or rate limiter, etc).
+
+### Improvements
+
+- Improve performance of [`CancellationTokenSource`](https://kean.github.io/post/cancellation-token), `Loader`, `TaskQueue`
+- Improve `Manager` performance by reusing contexts objects between requests
+- Improve `Cache` by ~30% for most operations (hits, misses, writes)
+- `Request` now stores all of the parameters in the underlying reference typed container (it used to store just reference typed ones). The `Request` struct now only has a single property with a reference to an underlying container.
+- Parallelize image processing for up to 2x performance boost in certain scenarios. Might increase memory usage. The default maximum number of concurrent tasks is 2 and can be configured using `Loader.Options`.
+- `Loader` now always call completion on the main thread.
+- Move `URLResponse` validation from `DataDecoder` to `DataLoader`
+- Make use of some Swift 4 feature like nested types inside generic types.
+- Improve compile time.
+- Wrap `Loader` processing and decoding tasks into `autoreleasepool` which reduced memory footprint.
+
+### Fixes
+
+- Get rid of Thread Sanitizer warnings in `CancellationTokenSource` (false positive)
+- Replace `Foundation.OperationQueue` & custom `Foundation.Operation` subclass with a new `Queue` type. It's simpler, faster, and gets rid of pesky Thread Sanitizer warnings https://github.com/kean/Nuke/issues/141
+
+### Removed APIs
+
+- Remove global `loadImage(...)` functions https://github.com/kean/Nuke/issues/142
+- Remove static `Request.loadKey(for:)` and `Request.cacheKey(for:)` functions. The keys are now simply returned in `Request`'s `loadKey` and `cacheKey` properties which are also no longer optional now.
+- Remove `Deduplicator` class, make this functionality part of `Loader`. This has a number of benefits: reduced API surface, improves performance by reducing the number of queue switching, enables new features like progress reporting.
+- Remove `Scheduler`, `AsyncScheduler`, `Loader.Schedulers`, `DispatchQueueScheduler`, `OperationQueueScheduler`. This whole infrastructure was way too excessive.
+- Make `RateLimiter` private.
+- `DataLoader` now works with `URLRequest`, not `Request`
+
+
+## Nuke 6.0-beta2
+
+- Fix memory leak in `Loader` - regression introduced in `6.0-beta1`
+- Get rid of Thread Sanitizer warnings in `CancellationTokenSource` (false positive)
+- Improve performance of `CancellationTokenSource`
+- Improve `Cache` hits and writes performance by ~15%
+- Improve `Loader` performance
+
+
+## Nuke 6.0-beta1
+
+> About 8 months ago I've started using Nuke in production. The project matured from being a playground for experimenting with Swift features to something that I rely on in my days work. The primary goal behind Nuke 6 is to simplify the project even further, and to get rid of the implementation details leaking into a public API.
+
+Nuke is now Swift 4 only. It's simpler, smaller (< 1000 lines of code) , and faster. It features progress reporting and makes it simpler to create custom data loader (e.g. [Alamofire data loader](https://github.com/kean/Nuke-Alamofire-Plugin)).
+
+### Features
+
+- Implements progress reporting https://github.com/kean/Nuke/issues/81
+
+### Removed APIs 
+
+- Remove global `loadImage(...)` functions https://github.com/kean/Nuke/issues/142
+- Remove `Deduplicator` class, make this functionality part of `Loader`. This has a number of benefits: reduced API surface, improves performance by reducing number of queue switching, enables new features like progress reporting.
+- Remove `Scheduler`, `AsyncScheduler`, `Loader.Schedulers`, `DispatchQueueScheduler`, `OperationQueueScheduler`. This whole infrastructure was way too excessive.
+- Make `RateLimiter` private.
+
+### Improvements 
+
+- Replace `Foundation.OperationQueue` & custom `Foundation.Operation` subclass with a new `Queue` type. It's simpler, faster, and gets rid of pesky Thread Sanitizer warnings https://github.com/kean/Nuke/issues/141
+- `DataLoader` now works with `URLRequest`, not `Request`
+- `Loader` now always call completion on the main thread.
+- Move `URLResponse` validation from `DataDecoder` to `DataLoader`
+- Make use of some Swift 4 feature like nested types inside generic types.
+
+
 ## Nuke 5.2
 
 Add support for both Swift 3.2 and 4.0.

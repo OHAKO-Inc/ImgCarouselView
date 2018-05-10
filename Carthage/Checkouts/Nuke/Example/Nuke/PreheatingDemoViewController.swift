@@ -9,7 +9,7 @@ import Preheat
 private let cellReuseID = "reuseID"
 private var loggingEnabled = false
 
-class PreheatingDemoViewController: UICollectionViewController {
+final class PreheatingDemoViewController: UICollectionViewController {
     var photos: [URL]!
 
     var preheater: Preheater!
@@ -27,12 +27,19 @@ class PreheatingDemoViewController: UICollectionViewController {
         }
         
         collectionView?.backgroundColor = UIColor.white
+        if #available(iOS 10.0, *) {
+            collectionView?.isPrefetchingEnabled = false
+        }
         collectionView?.register(UICollectionViewCell.self, forCellWithReuseIdentifier: cellReuseID)
     }
 
     func preheat(added: [IndexPath], removed: [IndexPath]) {
         func requests(for indexPaths: [IndexPath]) -> [Request] {
-            return indexPaths.map { Request(url: photos[$0.row]) }
+            return indexPaths.map {
+                var request = Request(url: photos[$0.row])
+                request.priority = .low
+                return request
+            }
         }
         preheater.startPreheating(with: requests(for: added))
         preheater.stopPreheating(with: requests(for: removed))

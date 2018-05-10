@@ -1,6 +1,6 @@
 // The MIT License (MIT)
 //
-// Copyright (c) 2017 Alexander Grebenyuk (github.com/kean).
+// Copyright (c) 2015-2018 Alexander Grebenyuk (github.com/kean).
 
 import Foundation
 
@@ -14,50 +14,6 @@ import Foundation
     public typealias Image = UIImage
 #endif
 
-/// Loads an image into the given target.
-///
-/// For more info see `loadImage(with:into:)` method of `Manager`.
-public func loadImage(with url: URL, into target: Target) {
-    Manager.shared.loadImage(with: url, into: target)
-}
-
-/// Loads an image into the given target.
-///
-/// For more info see `loadImage(with:into:)` method of `Manager`.
-public func loadImage(with request: Request, into target: Target) {
-    Manager.shared.loadImage(with: request, into: target)
-}
-
-/// Loads an image and calls the given `handler`. The method itself
-/// **doesn't do** anything when the image is loaded - you have full
-/// control over how to display it, etc.
-///
-/// The handler only gets called if the request is still associated with the
-/// `target` by the time it's completed. The handler gets called immediately
-/// if the image was stored in the memory cache.
-///
-/// See `loadImage(with:into:)` method for more info.
-public func loadImage(with url: URL, into target: AnyObject, handler: @escaping Manager.Handler) {
-    Manager.shared.loadImage(with: url, into: target, handler: handler)
-}
-
-/// Loads an image and calls the given `handler`. The method itself
-/// **doesn't do** anything when the image is loaded - you have full
-/// control over how to display it, etc.
-///
-/// The handler only gets called if the request is still associated with the
-/// `target` by the time it's completed. The handler gets called immediately
-/// if the image was stored in the memory cache.
-///
-/// For more info see `loadImage(with:into:handler:)` method of `Manager`.
-public func loadImage(with request: Request, into target: AnyObject, handler: @escaping Manager.Handler) {
-    Manager.shared.loadImage(with: request, into: target, handler: handler)
-}
-
-/// Cancels an outstanding request associated with the target.
-public func cancelRequest(for target: AnyObject) {
-    Manager.shared.cancelRequest(for: target)
-}
 
 /// An enum representing either a success with a result value, or a failure.
 public enum Result<T> {
@@ -74,24 +30,31 @@ public enum Result<T> {
     }
 }
 
-internal final class Lock {
-    var mutex = UnsafeMutablePointer<pthread_mutex_t>.allocate(capacity: 1)
 
-    init() { pthread_mutex_init(mutex, nil) }
+// MARK: - Deprecated
 
-    deinit {
-        pthread_mutex_destroy(mutex)
-        mutex.deinitialize()
-        mutex.deallocate(capacity: 1)
-    }
+@available(*, deprecated, message: "loadImage(with:into:) is deprecated. Use Manager.shared.loadImage(with:into:) instead.")
+public func loadImage(with url: URL, into target: Target) {
+    Manager.shared.loadImage(with: url, into: target)
+}
 
-    /// In critical places it's better to use lock() and unlock() manually
-    func sync<T>(_ closure: () -> T) -> T {
-        pthread_mutex_lock(mutex)
-        defer { pthread_mutex_unlock(mutex) }
-        return closure()
-    }
+@available(*, deprecated, message: "loadImage(with:into:) is deprecated. Use Manager.shared.loadImage(with:into:) instead.")
+public func loadImage(with request: Request, into target: Target) {
+    Manager.shared.loadImage(with: request, into: target)
+}
 
-    func lock() { pthread_mutex_lock(mutex) }
-    func unlock() { pthread_mutex_unlock(mutex) }
+@available(*, deprecated, message: "loadImage(with:into:handler:) is deprecated. Use Manager.shared.loadImage(with:into:handler:) instead.")
+public func loadImage(with url: URL, into target: AnyObject, handler: @escaping Manager.Handler) {
+    Manager.shared.loadImage(with: url, into: target, handler: handler)
+}
+
+@available(*, deprecated, message: "loadImage(with:into:handler:) is deprecated. Use Manager.shared.loadImage(with:into:handler:) instead.")
+public func loadImage(with request: Request, into target: AnyObject, handler: @escaping Manager.Handler) {
+    Manager.shared.loadImage(with: request, into: target, handler: handler)
+}
+
+/// Cancels an outstanding request associated with the target.
+@available(*, deprecated, message: "cancelRequest(for:) is deprecated. Use Manager.shared.cancelRequest(for:) instead.")
+public func cancelRequest(for target: AnyObject) {
+    Manager.shared.cancelRequest(for: target)
 }

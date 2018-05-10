@@ -112,7 +112,7 @@ extension ImgCarouselView: UICollectionViewDataSourcePrefetching {
                     .map { $0.row }
                     .contains(index)
             }
-            .flatMap { _, imageSource -> Request? in
+            .compactMap { _, imageSource -> Request? in
                 switch imageSource {
                 case .url(let url):
                     return Request(url: url)

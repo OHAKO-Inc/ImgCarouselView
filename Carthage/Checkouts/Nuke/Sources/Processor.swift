@@ -1,6 +1,6 @@
 // The MIT License (MIT)
 //
-// Copyright (c) 2017 Alexander Grebenyuk (github.com/kean).
+// Copyright (c) 2015-2018 Alexander Grebenyuk (github.com/kean).
 
 import Foundation
 
@@ -23,14 +23,14 @@ public struct ProcessorComposition: Processing {
     /// which they were added. If one of the processors fails to produce
     /// an image the processing stops and `nil` is returned.
     public func process(_ input: Image) -> Image? {
-        return processors.reduce(input as Image!) { image, processor in
-            return autoreleasepool { image != nil ? processor.process(image!) : nil }
+        return processors.reduce(input) { image, processor in
+            return autoreleasepool { image.flatMap(processor.process) }
         }
     }
 
     /// Returns true if the underlying processors are pairwise-equivalent.
     public static func ==(lhs: ProcessorComposition, rhs: ProcessorComposition) -> Bool {
-        return lhs.processors.elementsEqual(rhs.processors)
+        return lhs.processors == rhs.processors
     }
 }
 
@@ -55,6 +55,23 @@ public struct AnyProcessor: Processing {
     }
 }
 
+internal struct AnonymousProcessor<Key: Hashable>: Processing {
+    private let _key: Key
+    private let _closure: (Image) -> Image?
+
+    init(_ key: Key, _ closure: @escaping (Image) -> Image?) {
+        self._key = key; self._closure = closure
+    }
+
+    func process(_ image: Image) -> Image? {
+        return self._closure(image)
+    }
+
+    static func ==(lhs: AnonymousProcessor, rhs: AnonymousProcessor) -> Bool {
+        return lhs._key == rhs._key
+    }
+}
+
 #if !os(macOS)
 
     import UIKit
@@ -64,7 +81,7 @@ public struct AnyProcessor: Processing {
     ///
     /// Decompressing compressed image formats (such as JPEG) can significantly
     /// improve drawing performance as it allows a bitmap representation to be
-    /// created in the background rather than on the main thread.
+    /// created in a background rather than on the main thread.
     public struct Decompressor: Processing {
 
         /// An option for how to resize the image.
