@@ -16,7 +16,7 @@ platform :ios, '9.0'
 use_frameworks!
 
 target '<Your Target Name>' do
-    pod 'Nuke', '~> 6.0'
+    pod 'Nuke', '~> 7.0'
 end
 ```
 
@@ -40,7 +40,7 @@ $ brew install carthage
 To integrate Nuke into your Xcode project using Carthage, specify it in your `Cartfile`:
 
 ```ogdl
-github "kean/Nuke" ~> 6.0
+github "kean/Nuke" ~> 7.0
 ```
 
 Run `carthage update` to build the framework and drag the built `Nuke.framework` into your Xcode project.

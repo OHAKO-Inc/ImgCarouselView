@@ -3,44 +3,73 @@
 // Copyright (c) 2015-2018 Alexander Grebenyuk (github.com/kean).
 
 import Foundation
-import Nuke
+@testable import Nuke
 
-private let data: Data = {
-    let bundle = Bundle(for: MockDataLoader.self)
-    let URL = bundle.url(forResource: "Image", withExtension: "jpg")
-    return try! Data(contentsOf: URL!)
-}()
+private let data: Data = Test.data(name: "fixture", extension: "jpeg")
+
+private final class MockDataTask: Cancellable {
+    var _cancel: () -> Void = { }
+    func cancel() {
+        _cancel()
+    }
+}
 
 class MockDataLoader: DataLoading {
     static let DidStartTask = Notification.Name("com.github.kean.Nuke.Tests.MockDataLoader.DidStartTask")
     static let DidCancelTask = Notification.Name("com.github.kean.Nuke.Tests.MockDataLoader.DidCancelTask")
     
     var createdTaskCount = 0
-    var results = [URL: Result<(Data, URLResponse)>]()
+    var results = [URL: _Result<(Data, URLResponse), NSError>]()
     let queue = OperationQueue()
 
-    func loadData(with request: URLRequest, token: CancellationToken?, progress: ProgressHandler?, completion: @escaping (Result<(Data, URLResponse)>) -> Void) {
+    func loadData(with request: URLRequest, didReceiveData: @escaping (Data, URLResponse) -> Void, completion: @escaping (Error?) -> Void) -> Cancellable {
+        let task = MockDataTask()
+
         NotificationCenter.default.post(name: MockDataLoader.DidStartTask, object: self)
-        token?.register {
-            NotificationCenter.default.post(name: MockDataLoader.DidCancelTask, object: self)
-        }
-        
+
         createdTaskCount += 1
 
-        let operation = BlockOperation() {
-            progress?(10, 20)
-            progress?(20, 20)
-
+        let operation = BlockOperation {
             if let result = self.results[request.url!] {
-                completion(result)
+                switch result {
+                case let .success(val):
+                    let data = val.0
+                    assert(!data.isEmpty)
+                    didReceiveData(data.prefix(data.count / 2), val.1)
+                    didReceiveData(data.suffix(data.count / 2), val.1)
+                    completion(nil)
+                case let .failure(err):
+                    completion(err)
+                }
             } else {
-                completion(.success((data, URLResponse())))
+                didReceiveData(data, URLResponse())
+                completion(nil)
             }
         }
         queue.addOperation(operation)
 
-        token?.register {
+        task._cancel = {
+            NotificationCenter.default.post(name: MockDataLoader.DidCancelTask, object: self)
             operation.cancel()
         }
+
+        return task
+    }
+}
+
+// MARK: - Result
+
+// we're still using Result internally, but don't pollute user's space
+internal enum _Result<T, Error: Swift.Error> {
+    case success(T), failure(Error)
+
+    /// Returns a `value` if the result is success.
+    var value: T? {
+        if case let .success(val) = self { return val } else { return nil }
+    }
+
+    /// Returns an `error` if the result is failure.
+    var error: Error? {
+        if case let .failure(err) = self { return err } else { return nil }
     }
 }

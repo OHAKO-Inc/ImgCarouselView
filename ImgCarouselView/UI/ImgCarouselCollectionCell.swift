@@ -37,7 +37,8 @@ public extension ImgCarouselCollectionCell {
             imageView.image = image
         case .url(let url):
             print(url.absoluteString)
-            Manager.shared.loadImage(with: url, into: imageView)
+            
+            Nuke.loadImage(with: url, into: imageView)
         }
     }
 }

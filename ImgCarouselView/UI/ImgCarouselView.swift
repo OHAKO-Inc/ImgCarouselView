@@ -19,7 +19,7 @@ public final class ImgCarouselView: UIView, XibInstantiatable {
     @IBOutlet weak var pageControl: UIPageControl!
     
     // MARK: - for UICollectionViewDataSourcePrefetching
-    fileprivate let preheater = Preheater(manager: Manager.shared)
+    fileprivate let preheater = ImagePreheater()
     
     // MARK: - Lifecycle Methods
     public override init(frame: CGRect) {
@@ -104,7 +104,7 @@ extension ImgCarouselView: UICollectionViewDataSourcePrefetching {
     }
     
     // MARK: - private funcs
-    private func makeCacheRequests(indexPaths: [IndexPath]) -> [Request] {
+    private func makeCacheRequests(indexPaths: [IndexPath]) -> [ImageRequest] {
         return imageSources
             .enumerated()
             .filter { index, _ -> Bool in
@@ -112,10 +112,10 @@ extension ImgCarouselView: UICollectionViewDataSourcePrefetching {
                     .map { $0.row }
                     .contains(index)
             }
-            .compactMap { _, imageSource -> Request? in
+            .compactMap { _, imageSource -> ImageRequest? in
                 switch imageSource {
                 case .url(let url):
-                    return Request(url: url)
+                    return ImageRequest(url: url)
                 case .image:
                     return nil
                 }
