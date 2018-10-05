@@ -5,66 +5,73 @@
 import XCTest
 @testable import Nuke
 
-
 class RateLimiterTests: XCTestCase {
- 
-    // MARK: Thread Safety
-    
-    func testThreadSafety() {
-        let limiter = RateLimiter(rate: 10000, burst: 1000)
-        
-        // can't figure out how to put closures that accept 
-        // escaping closures as parameters directly in the array
-        struct Op {
-            let closure: (@escaping () -> Void) -> Void
-        }
-        
-        var ops = [Op]()
-        
-        ops.append(Op() { fulfill in
-            let cts = CancellationTokenSource()
-            limiter.execute(token: cts.token) {
-                sleep(UInt32(Double(rnd(10)) / 100.0))
-                fulfill()
-            }
-        })
-        
-        ops.append(Op() { fulfill in
-            // cancel after executing
-            let cts = CancellationTokenSource()
-            limiter.execute(token: cts.token) {
-                sleep(UInt32(Double(rnd(10)) / 100.0))
-            }
-            cts.cancel()
-            fulfill() // we don't except fulfil
-        })
-        
-        ops.append(Op() { fulfill in
-            // cancel immediately
-            let cts = CancellationTokenSource()
-            cts.cancel()
-            limiter.execute(token: cts.token) {
-                sleep(UInt32(Double(rnd(10)) / 100.0))
-                XCTFail() // must not be executed
-            }
-            fulfill()
-        })
+    let queue = DispatchQueue(label: "RateLimiterTests")
+    var rateLimiter: RateLimiter!
 
-        for _ in 0..<5000 {
-            expect { fulfill in
-                let queue = OperationQueue()
-                
-                // RateLimiter is not designed (unlike user-facing classes) to
-                // handle unlimited pressure from the outside, thus we limit
-                // the number of concurrent ops
-                queue.maxConcurrentOperationCount = 50
-                
-                queue.addOperation {
-                    ops.randomItem().closure(fulfill)
-                }
-            }
+    override func setUp() {
+        rateLimiter = RateLimiter(queue: queue, rate: 3, burst: 2)
+    }
+
+    func testThatBurstIsExecutedImmediatelly() {
+        // Given
+        let cts = _CancellationTokenSource()
+        var isExecuted = Array(repeating: false, count: 3)
+
+        // When
+        rateLimiter.execute(token: cts.token) {
+            isExecuted[0] = true
         }
-        
+
+        rateLimiter.execute(token: cts.token) {
+            isExecuted[1] = true
+        }
+
+        rateLimiter.execute(token: cts.token) {
+            isExecuted[2] = true
+        }
+
+        // Then
+        XCTAssertEqual(isExecuted, [true, true, false])
+    }
+
+    // MARK: - Cancellation
+
+    func testThatCancelledTaskIsNotExecuted() {
+        // Given
+        let cts = _CancellationTokenSource()
+        var isExecuted = false
+
+        cts.cancel()
+
+        // When
+        rateLimiter.execute(token: cts.token) {
+            isExecuted = true
+        }
+
+        // Then
+        XCTAssertFalse(isExecuted)
+    }
+
+    func testThatCancelledPendingTaskIsNotExecuted() {
+        rateLimiter.execute(token: token) {}
+        rateLimiter.execute(token: token) {}
+
+        let cts = _CancellationTokenSource()
+        rateLimiter.execute(token: cts.token) {
+            XCTFail()
+        }
+        cts.cancel()
+
+        let expectation = self.expectation(description: "")
+        rateLimiter.execute(token: token) {
+            expectation.fulfill()
+        }
+
         wait()
     }
+}
+
+private var token: _CancellationToken {
+    return _CancellationTokenSource().token
 }
